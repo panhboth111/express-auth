@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const user = require("./routes/user");
+const drink = require("./routes/drink");
+const checkToken = require("./utilities/checkToken");
 
 const startServer = async () => {
   const PORT = 3000;
@@ -10,7 +12,9 @@ const startServer = async () => {
 
   app.use(cors());
   app.use(express.json());
+  app.use("/drinks", checkToken, drink);
   app.use("/users", user);
+
   await mongoose
     .connect(DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log("Database connection established"))
